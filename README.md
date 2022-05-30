@@ -1,4 +1,4 @@
-# shopping2
+# market
 
 ## Project setup
 ```
