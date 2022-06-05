@@ -3,6 +3,7 @@
     <!-- eslint-disable vue/no-unused-vars -->
     <Nav></Nav>
     <ListContainer></ListContainer>
+    <button @click="getInfo">测试</button>
   </div>
 </template>
 
@@ -25,6 +26,11 @@ export default {
     ...mapState({
       floorList: state => state.home.floorList
     })
+  },
+  methods: {
+    async getInfo () {
+      await this.$store.dispatch('GetUserInfo')
+    }
   }
 }
 </script>

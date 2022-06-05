@@ -10,16 +10,16 @@
               <a href="#">全部结果</a>
             </li>
           </ul>
-          <ul class="fl sui-tag">
+          <!-- <ul class="fl sui-tag"> -->
             <!-- 分类的面包屑 -->
-            <li class="with-x" v-if="searchParams.categoryName">{{searchParams.categoryName}}<i @click="removecateName">×</i></li>
+            <!-- <li class="with-x" v-if="searchParams.categoryName">{{searchParams.categoryName}}<i @click="removecateName">×</i></li> -->
             <!-- 关键字的面包屑 -->
-            <li class="with-x" v-if="searchParams.keyword">{{searchParams.keyword}}<i @click="removeKeyword">×</i></li>
+            <!-- <li class="with-x" v-if="searchParams.keyword">{{searchParams.keyword}}<i @click="removeKeyword">×</i></li> -->
             <!-- 品牌的面包屑 -->
-            <li class="with-x" v-if="searchParams.trademark">{{searchParams.trademark.split(":")[1]}}<i @click="removeTrademark">×</i></li>
+            <!-- <li class="with-x" v-if="searchParams.trademark">{{searchParams.trademark.split(":")[1]}}<i @click="removeTrademark">×</i></li> -->
             <!-- 平台属性的面包屑 -->
-            <li class="with-x" v-for="(attrValue, index) in searchParams.props" :key="index">{{attrValue.split(":")[1]}}<i @click="removeAttr">×</i></li>
-          </ul>
+            <!-- <li class="with-x" v-for="(attrValue, index) in searchParams.props" :key="index">{{attrValue.split(":")[1]}}<i @click="removeAttr">×</i></li> -->
+          <!-- </ul> -->
         </div>
 
         <!--selector-->

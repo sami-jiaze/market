@@ -3,24 +3,6 @@
     <!-- 头部的第一行 -->
     <div class="top">
       <div class="container">
-        <div class="loginList">
-          <p>欢迎您！</p>
-          <p v-if="!userName">
-            <a @click="centerDialogVisible = true">管理员登录</a>
-          </p>
-          <p v-else>
-            <a>{{userName}}</a>
-            <a class="register" @click="logout">退出登录</a>
-          </p>
-          <el-dialog title="管理员登录" :visible.sync="centerDialogVisible" width="30%" center>
-            账号：<input type="text" placeholder="请输入账号" v-model="phone"><br>
-            密码：<input type="password" placeholder="请输入密码" v-model="password">
-            <span slot="footer" class="dialog-footer">
-              <el-button @click="centerDialogVisible = false">取 消</el-button>
-              <el-button type="primary" @click="login">确 定</el-button>
-            </span>
-          </el-dialog>
-        </div>
         <div class="typeList">
           <router-link to="/home">商城主页</router-link>
           <router-link to="/trade">我的订单</router-link>
@@ -58,20 +40,6 @@ export default {
         location.query = this.$route.query
         this.$router.push(location)
       }
-    },
-    async logout () {
-      await this.$store.dispatch('userLogout')
-      this.$router.push('/home')
-    },
-    async login () {
-      this.centerDialogVisible = false
-      try {
-        const { phone, password } = this;
-        (phone && password) && await this.$store.dispatch('adminLogin', { phone, password })
-        location.reload()
-      } catch (error) {
-        alert(error.message)
-      }
     }
   },
   data () {
@@ -90,6 +58,9 @@ export default {
   computed: {
     userName () {
       return this.$store.state.user.userInfo.name
+    },
+    token () {
+      return this.$store.state.user.token
     }
   }
 }
@@ -106,22 +77,6 @@ export default {
       width: 1200px;
       margin: 0 auto;
       overflow: hidden;
-
-      .loginList {
-        float: left;
-
-        p {
-          float: left;
-          margin-right: 10px;
-
-          .register {
-            border-left: 1px solid #b3aeae;
-            padding: 0 5px;
-            margin-left: 5px;
-          }
-        }
-      }
-
       .typeList {
         float: right;
 

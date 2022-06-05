@@ -8,10 +8,6 @@
           <li v-for="(trademark, index) in trademarkList" :key="trademark.tmId" @click="tradeMarkHandler(trademark)">{{trademark.tmName}}</li>
         </ul>
       </div>
-      <div class="ext">
-        <a href="javascript:void(0);" class="sui-btn">多选</a>
-        <a href="javascript:void(0);">更多</a>
-      </div>
     </div>
     <!-- eslint-disable-next-line vue/no-unused-vars -->
     <div class="type-wrap" v-for="(attr, index) in attrsList" :key="attr.attrId">

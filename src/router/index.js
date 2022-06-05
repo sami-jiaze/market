@@ -15,6 +15,7 @@ import Upload from '@/views/Upload'
 import userInfo from '@/views/userInfo/index.vue'
 import tradeList from '@/views/userInfo/tradeList.vue'
 import verifyGoods from '@/views/userInfo/verifyGoods.vue'
+import allList from '@/views/userInfo/allList.vue'
 import store from '@/store'
 Vue.use(VueRouter)
 
@@ -24,50 +25,42 @@ const routes = [
     component: userInfo,
     children: [
       { path: 'tradeList', component: tradeList },
-      { path: 'verifyGoods', component: verifyGoods }
-    ],
-    meta: { show: true }
+      { path: 'verifyGoods', component: verifyGoods },
+      { path: 'allList', component: allList }
+    ]
   },
   {
     path: '/upload',
-    component: Upload,
-    meta: { show: true }
+    component: Upload
   },
   {
     path: '/pay',
-    component: Pay,
-    meta: { show: true }
+    component: Pay
   },
   {
     path: '/trade',
-    component: Trade,
-    meta: { show: true }
+    component: Trade
   },
   {
     path: '/shopcart',
-    component: ShopCart,
-    meta: { show: true }
+    component: ShopCart
   },
   {
     path: '/addcartsuccess',
     name: 'addcartsuccess',
-    component: AddCartSuccess,
-    meta: { show: true }
+    component: AddCartSuccess
   },
   {
     path: '/detail/:skuid',
-    component: Detail,
-    meta: { show: true }
+    component: Detail
   },
   {
     path: '/home',
-    component: Home,
-    meta: { show: true }
+    component: Home
   },
   {
     path: '/search/:keyword?',
     component: Search,
-    meta: { show: true },
     name: 'search'
   },
   {
@@ -95,19 +88,14 @@ const router = new VueRouter({
 router.beforeEach(async (to, from, next) => {
   next()
   let token = store.state.user.token
-  let name = store.state.user.userInfo.name
   if (token) {
-    if (name) {
+    try {
+      // 保证每次刷新用户信息都在
+      await store.dispatch('userPermission')
       next()
-    } else {
-      try {
-        // 保证每次刷新用户信息都在
-        await store.dispatch('GetUserInfo')
-        next()
-      } catch (error) {
-        await store.dispatch('userLogout')
-        next('/login')
-      }
+    } catch (error) {
+      await store.dispatch('userLogout')
+      next('/login')
     }
   } else {
     next()

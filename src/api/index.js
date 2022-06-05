@@ -35,7 +35,7 @@ export function reqAddShopCart (skuId, skuNum) {
 export function reqCartList () {
   return requests({
     method: 'get',
-    url: 'http://gmall-h5-api.atguigu.cn/api/cart/cartList',
+    url: 'http://gmall-h5-api.atguigu.cn/api/cart/cartList'
     // url: 'http://43.138.43.158:8082/api/cart/cartList'
   })
 }
@@ -58,8 +58,7 @@ export function reqUserRegister (data) {
   return requests({
     method: 'post',
     // url: 'http://gmall-h5-api.atguigu.cn/api/user/passport/register',
-    url: 'http://43.138.43.158:8082/api/user/passport/register',
-    data
+    url: `http://106.52.167.146:8001/api/user/passport/register?${data}`
   })
 }
 // 登录接口
@@ -67,30 +66,30 @@ export function reqUserLogin (data) {
   return requests({
     method: 'post',
     // url: 'http://106.52.167.146:8001/api/user/passport/login',
-    url: 'http://gmall-h5-api.atguigu.cn/api/user/passport/login',
-    data
+    url: `http://106.52.167.146:8001/api/user/passport/login?${data}`
   })
 }
 // 获取用户信息
 export function reqUserInfo () {
   return requests({
     method: 'get',
-    url: 'http://gmall-h5-api.atguigu.cn/api/user/passport/auth/getUserInfo'
-    // url: 'http://106.52.167.146:8001/api/user/passport/auth/getUserInfo'
+    // url: 'http://gmall-h5-api.atguigu.cn/api/user/passport/auth/getUserInfo'
+    url: 'http://106.52.167.146:8001/api/user/info/information'
   })
 }
 // 退出登录
 export function reqLogout () {
   return requests({
     method: 'get',
-    url: 'http://gmall-h5-api.atguigu.cn/api/user/passport/logout'
+    // url: 'http://gmall-h5-api.atguigu.cn/api/user/passport/logout'
+    url: 'http://106.52.167.146:8001/api/user/passport/logout'
   })
 }
 // 获取验证码
-export function reqRegCode () {
+export function reqRegCode (phone) {
   return requests({
     method: 'get',
-    url: 'http://43.138.43.158:8082/api/user/passport/code'
+    url: `http://nick.cab/api/user/passport/sendCode/${phone}`
   })
 }
 // 获取商品清单
@@ -114,6 +113,21 @@ export function reqUpload (data) {
     method: 'post',
     url: 'http://43.138.43.158:8082/api/upload',
     data
+  })
+}
+// 用户上传图片功能
+export function reqUploadImg (data) {
+  return requests({
+    method: 'post',
+    url: 'http://43.138.43.158:8082/api/uploadImg',
+    data
+  })
+}
+// 用户更新个人资料功能
+export function reqUploadInfo (data) {
+  return requests({
+    method: 'post',
+    url: `http://106.52.167.146:8001/api/user/info/updateUserInfo/${data}`
   })
 }
 // 权限获取
@@ -142,5 +156,12 @@ export function reqAdminPass (skuId) {
   return requests({
     method: 'post',
     url: `http://43.138.43.158:8082/admin/update?skuId=${skuId}`
+  })
+}
+// 管理员通过的商品
+export function reqAdminPassList () {
+  return requests({
+    method: 'get',
+    url: 'http://43.138.43.158:8082/api/approvedGoods'
   })
 }

@@ -45,8 +45,9 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import qs from 'querystring'
-import axios from 'axios'
+// import axios from 'axios'
 export default {
   data () {
     return {
@@ -60,19 +61,25 @@ export default {
     }
   },
   methods: {
-    handleelchange (file, fileList) {
+    async handleelchange (file, fileList) {
       console.log(file, fileList)
       // eslint-disable-next-line prefer-const
       let formdata = new FormData()
       fileList.map(item => {
         formdata.append('file', item.raw)
       })
-      axios.post('http://43.138.43.158:8082/api/uploadImg', formdata).then(res => { console.log(res.data.message) })
+      await this.$store.dispatch('userUploadImg', formdata)
+      // axios.post('http://43.138.43.158:8082/api/uploadImg', this.goodsId).then(res => { console.log(res.data.message) })
     },
     async onSubmit () {
       console.log(this.form)
       await this.$store.dispatch('userUpload', qs.stringify(this.form))
     }
+  },
+  computed: {
+    ...mapState({
+      goodsId: state => state.user.goodId
+    })
   }
 }
 </script>

@@ -36,18 +36,19 @@
         <div class="userInfo">
           <img src="./images/head.jpg" alt="">
           <div class="wel">Hi~{{user.name}}你好<br>
-          <span v-if="user.name">您的身份是</span>
+          <span v-if="token">您的身份是</span>
           <span v-else>您的身份是游客</span>
-          <span v-if="!userName" class="red">普通用户</span>
-          <span v-if="userName" class="red">管理员</span>
+          <span v-if="permission=='user'" class="red">普通用户</span>
+          <span v-if="permission=='admin'" class="red">管理员</span>
         </div>
-         <p v-if="!userName">
+         <p v-if="!token">
           <router-link to="/login"><a class="log">登录</a></router-link>
           <router-link to="/register" class="register"><a class="reg">注册</a></router-link>
          </p>
          <p v-else>
            <router-link to="/upload"><a class="upload">发布我的商品</a></router-link>
             <router-link to="/userInfo"><a class="upload">个人中心</a></router-link>
+            <a class="upload" @click="logout">退出登录</a>
          </p>
         </div>
       </div>
@@ -62,17 +63,24 @@ export default {
   mounted () {
     // 派发action通知vuex发起ajax请求，将数据存储在仓库中
     this.$store.dispatch('getbannnerlist')
+    this.$store.dispatch('userPermission')
+  },
+  methods: {
+    async logout () {
+      await this.$store.dispatch('userLogout')
+      this.$router.push('/home')
+    }
   },
   computed: {
     ...mapState({
       bannerList: state => state.home.bannerList,
       user: state => state.user.userInfo
     }),
-    userName () {
-      return this.$store.state.user.userInfo.name
+    permission () {
+      return this.$store.state.user.message
     },
-    admin () {
-      return this.$store.state.user.admin
+    token () {
+      return this.$store.state.user.token
     }
   }
 }

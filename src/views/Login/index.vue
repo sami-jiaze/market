@@ -35,21 +35,15 @@
 </template>
 
 <script>
-// import qs from 'querystring'
+import qs from 'querystring'
 export default {
   name: 'Login',
   methods: {
-    // async login () {
-    //   try {
-    //     await this.$store.dispatch('userLogin', qs.stringify(this.loginform)) && this.$router.push('/home')
-    //   } catch (error) {
-    //     alert(error.message)
-    //   }
-    // }
     async login () {
       try {
-        const { phone, password } = this;
-        (phone && password) && await this.$store.dispatch('userLogin', { phone, password }) && this.$router.push('/home')
+        const { phone, password } = this
+        // console.log(qs.stringify({ phone, password }))
+        await this.$store.dispatch('userLogin', qs.stringify({ phone, password })) && this.$router.push('/home')
       } catch (error) {
         alert(error.message)
       }

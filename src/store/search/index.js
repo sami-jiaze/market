@@ -19,7 +19,6 @@ const actions = {
     }
   }
 }
-// 计算属性 主要作用是简化仓库数据
 const getters = {
   goodsList (state) {
     // 没有网络时返回空对象undefined

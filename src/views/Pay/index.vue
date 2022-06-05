@@ -8,7 +8,7 @@
         </h4>
         <div class="paymark">
           <span class="fl">请您在提交订单<em class="orange time">4小时</em>之内完成支付，超时订单会自动取消。订单号：<em>145687</em></span>
-          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥17,654</em></span>
+          <span class="fr"><em class="lead">应付金额：</em><em class="orange money">￥{{totalPrice}}</em></span>
         </div>
       </div>
       <div class="checkout-steps">
@@ -23,7 +23,7 @@
         </div>
 
         <div class="submit">
-          <router-link class="btn" to="/paysuccess">立即支付</router-link>
+          <router-link class="btn" @click="goPay" to="/home">立即支付</router-link>
           <router-link class="btn1" to="/trade">取消支付</router-link>
         </div>
       </div>
@@ -32,8 +32,30 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
-  name: 'Pay'
+  name: 'Pay',
+  methods: {
+    goPay () {
+
+    }
+  },
+  computed: {
+    ...mapGetters(['cartList']),
+    cartInfoList () {
+      return this.cartList.cartInfoList || []
+    },
+    totalPrice () {
+      let sum = 0
+      this.cartInfoList.forEach(item => {
+        sum += item.skuNum * item.skuPrice
+      })
+      return sum
+    },
+    token () {
+      return this.$store.state.user.token
+    }
+  }
 }
 </script>
 

@@ -11,7 +11,7 @@
       <h5 class="pei">配送时间:预计次日19:00-22:00送达</h5>
       <div class="detail">
         <h5>商品清单</h5>
-        <ul class="list clearFix" v-for="(order, index) in orderInfo.detailArrayList" :key="order.skuId">
+        <!-- <ul class="list clearFix" v-for="(order, index) in orderInfo.detailArrayList" :key="order.skuId">
           <li>
             <img :src="order.imgUrl" alt="" style="width:100px;height:100px">
           </li>
@@ -23,6 +23,18 @@
             <h3>￥{{order.orderPrice}}</h3>
           </li>
           <li>X{{order.skuNum}}</li>
+        </ul> -->
+          <ul class="cart-list" v-for="(cart, index) in cartInfoList" :key="cart.id">
+          <li class="cart-list-con2">
+            <img :src="cart.imgUrl" class="img">
+            <div class="item-msg">商品名称:{{cart.skuName}}</div>
+          </li>
+          <li class="cart-list-con4">
+            <span class="price">价格：{{cart.skuPrice}}</span>
+          </li>
+          <li class="cart-list-con6">
+            <span class="sum">商品数量{{cart.skuNum}}</span>
+          </li>
         </ul>
       </div>
       <div class="bbs">
@@ -30,16 +42,8 @@
         <textarea placeholder="建议留言前先与商家沟通确认" class="remarks-cont" v-model="msg"></textarea>
       </div>
     </div>
-    <div class="money clearFix">
-      <ul>
-        <li>
-          <b><i>{{orderInfo.totalNum}}</i>件商品，总商品金额</b>
-          <span>¥{{orderInfo.totalAmount}}</span>
-        </li>
-      </ul>
-    </div>
     <div class="trade">
-      <div class="price">应付金额: <span>¥{{orderInfo.totalAmount}}</span></div>
+      <div class="price">应付金额:<span>¥ {{totalPrice}}{{orderInfo.totalAmount}}</span></div>
       <div class="receiveInfo">
         寄送至:{{address}}
         <span></span>
@@ -54,7 +58,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'Trade',
   data () {
@@ -66,20 +70,32 @@ export default {
     }
   },
   mounted () {
-    this.$store.dispatch('getOrderInfo')
+    // this.$store.dispatch('getOrderInfo')
+    this.$store.dispatch('getCartList')
     console.log(this.$store.state.user)
   },
   computed: {
+    ...mapGetters(['cartList']),
     ...mapState({
       orderInfo: state => state.trade.orderInfo,
       user: state => state.user.userInfo
-    })
+    }),
+    cartInfoList () {
+      return this.cartList.cartInfoList || []
+    },
+    totalPrice () {
+      let sum = 0
+      this.cartInfoList.forEach(item => {
+        sum += item.skuNum * item.skuPrice
+      })
+      return sum
+    }
 
   },
   methods: {
     // 提交订单
     submitOrder () {
-      // this.$router.push('/pay?orderId=' + this.orderId)
+
     }
   }
 }
@@ -153,6 +169,10 @@ export default {
           }
         }
       }
+      .img{
+        width: 200px;
+        height: 200px;
+      }
 
       .bbs {
         margin-bottom: 15px;
@@ -167,26 +187,6 @@ export default {
           line-height: 1.8;
           outline: none;
           resize: none;
-        }
-      }
-    }
-
-    .money {
-      width: 1200px;
-      margin: 20px auto;
-
-      ul {
-        width: 220px;
-        float: right;
-
-        li {
-          line-height: 30px;
-          display: flex;
-          justify-content: space-between;
-
-          i {
-            color: red;
-          }
         }
       }
     }

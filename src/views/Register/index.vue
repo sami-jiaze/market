@@ -7,6 +7,10 @@
         </span>
       </h3>
       <div class="content">
+        <label>您的昵称:</label>
+        <input type="text" placeholder="请输入你的昵称" v-model="name">
+      </div>
+      <div class="content">
         <label>手机号:</label>
         <input type="text" placeholder="请输入你的手机号" v-model="phone">
       </div>
@@ -20,7 +24,11 @@
       </div>
       <div class="content">
         <label>输入验证码:</label>
-        <input type="text" placeholder="请输入验证码" v-model="code"><button class="codeBtn" @click="getCode">获取验证码</button>
+        <input type="text" placeholder="请输入验证码" v-model="code">
+        <button class="codeBtn" @click="getCode(phone)">获取验证码</button>
+        <div >
+          <img :src="imgsrc" alt="" class="imgQrCode">
+        </div>
       </div>
       <div class="btn">
         <button @click="UserRegister">完成注册</button>
@@ -31,23 +39,27 @@
 </template>
 
 <script>
+import axios from 'axios'
+import qs from 'querystring'
 export default {
   name: 'Register',
   data () {
     return {
-      phone: '',
+      name: '',
+      phone: '158',
       password: '',
       password1: '',
       code: '',
-      agree: true
+      agree: true,
+      imgsrc: ''
     }
   },
   methods: {
     async UserRegister () {
       try {
-        const { phone, password, password1 } = this
+        const { phone, password, password1, code, name } = this
         if (password === password1) {
-          await this.$store.dispatch('userRegister', { phone, password })
+          await this.$store.dispatch('userRegister', qs.stringify({ phone, password, code, name }))
           this.$router.push('/login')
         } else {
           alert('两次输入的密码不匹配')
@@ -56,9 +68,22 @@ export default {
         alert(error.message)
       }
     },
-    async getCode () {
-      await this.$store.dispatch('userCode')
+    getCode (phone) {
+      axios.get(`http://nick.cab/api/user/passport/sendCode/${phone}`, { responseType: 'blob' }).then((res) => {
+        // const { data, headers } = res
+        // const blob = new Blob([data], { type: headers['content-type'] })
+        // this.imgsrc = window.URL.createObjectURL(blob)
+        // this.imgsrc = this.imgsrc.slice(5)
+        // console.log(res)
+        // console.log(this.imgsrc)
+        // const img1 = document.createElement('img')
+        // img1.src = this.imgsrc
+        // document.querySelector('.imgQrCode').appendChild(img1)
+        this.imgsrc = `http://nick.cab/api/user/passport/sendCode/${phone}`
+      })
+      // await this.$store.dispatch('userCode', phone)
     }
+
   }
 }
 </script>
@@ -68,7 +93,6 @@ export default {
   .register {
     width: 1200px;
     height: 445px;
-    border: 1px solid rgb(223, 223, 223);
     margin: 0 auto;
 
     h3 {
@@ -76,7 +100,6 @@ export default {
       margin: 0;
       padding: 6px 15px;
       color: #333;
-      border-bottom: 1px solid #dfdfdf;
       font-size: 20.04px;
       line-height: 30.06px;
 
@@ -164,5 +187,8 @@ export default {
       }
     }
   }
+}
+.imgQrCode{
+  margin-left: 128px;
 }
 </style>
